@@ -19,298 +19,45 @@
             --shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            padding-bottom: 70px;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 20px 15px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        header h1 {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .status-container {
-            background: rgba(255,255,255,0.1);
-            padding: 5px 10px;
-            font-size: 11px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: inline-block;
-            margin-right: 5px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
-        .section {
-            display: none;
-            padding: 15px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: var(--shadow);
-        }
-
-        .card h2 {
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: var(--primary);
-            border-left: 4px solid var(--accent);
-            padding-left: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--text-light);
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1.5px solid #eee;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.1);
-        }
-
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .preview-img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-top: 10px;
-            display: none;
-            border: 2px solid #eee;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 70px; }
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 20px 15px; text-align: center; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; }
+        header h1 { font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .status-container { background: rgba(255,255,255,0.1); padding: 5px 10px; font-size: 11px; display: flex; justify-content: space-between; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; margin-right: 5px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .section { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: var(--card-bg); border-radius: 15px; padding: 20px; margin-bottom: 15px; box-shadow: var(--shadow); }
+        .card h2 { font-size: 16px; margin-bottom: 15px; color: var(--primary); border-left: 4px solid var(--accent); padding-left: 10px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: var(--text-light); }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1.5px solid #eee; border-radius: 10px; font-size: 14px; transition: all 0.3s; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.1); }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .preview-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; border: 2px solid #eee; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-success { background: var(--success); color: white; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-secondary { background: #eee; color: var(--text); }
-
         .btn:active { transform: scale(0.97); opacity: 0.9; }
-
-        .record-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid #eee;
-        }
-
-        .record-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: #eee;
-        }
-
-        .record-content {
-            padding: 15px;
-        }
-
-        .record-title {
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .record-detail {
-            font-size: 13px;
-            color: var(--text-light);
-            margin-bottom: 3px;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            text-align: center;
-            color: var(--text-light);
-            font-size: 10px;
-            font-weight: 600;
-            flex: 1;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            padding: 20px;
-            align-items: center;
-            justify-content: center;
-        }
-
+        .record-card { background: white; border-radius: 15px; overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow); border: 1px solid #eee; }
+        .record-img { width: 100%; height: 200px; object-fit: cover; background: #eee; }
+        .record-content { padding: 15px; }
+        .record-title { font-weight: 700; font-size: 16px; color: var(--primary); margin-bottom: 5px; }
+        .record-detail { font-size: 13px; color: var(--text-light); margin-bottom: 3px; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 1000; }
+        .nav-item { text-align: center; color: var(--text-light); font-size: 10px; font-weight: 600; flex: 1; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 2px; }
+        .nav-item.active { color: var(--primary); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; padding: 20px; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            padding: 25px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 12px 25px;
-            border-radius: 30px;
-            color: white;
-            font-size: 13px;
-            font-weight: 600;
-            z-index: 3000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            display: none;
-        }
-
-        .search-bar {
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 12px 15px 12px 40px;
-            border-radius: 10px;
-            border: 1.5px solid #eee;
-            font-size: 14px;
-        }
-
-        .search-bar::before {
-            content: '🔍';
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-        }
-
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.8);
-            z-index: 4000;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+        .modal-content { background: white; border-radius: 20px; width: 100%; max-width: 500px; padding: 25px; max-height: 90vh; overflow-y: auto; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 25px; border-radius: 30px; color: white; font-size: 13px; font-weight: 600; z-index: 3000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: none; }
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 4000; flex-direction: column; align-items: center; justify-content: center; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -331,35 +78,16 @@
     <section id="addSection" class="section active">
         <div class="card">
             <h2>Product Entry</h2>
-            <div class="form-group">
-                <label>Date</label>
-                <input type="date" id="dateInput">
-            </div>
-            <div class="form-group">
-                <label>Product Name</label>
-                <input type="text" id="nameInput" placeholder="Enter product name">
-            </div>
-            <div class="form-group">
-                <label>Product For</label>
-                <input type="text" id="forInput" placeholder="Customer or purpose">
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea id="descInput" rows="3" placeholder="Detailed description"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Remarks</label>
-                <input type="text" id="remarksInput" placeholder="Additional notes">
-            </div>
+            <div class="form-group"><label>Date</label><input type="date" id="dateInput"></div>
+            <div class="form-group"><label>Product Name</label><input type="text" id="nameInput" placeholder="Enter product name"></div>
+            <div class="form-group"><label>Product For</label><input type="text" id="forInput" placeholder="Customer or purpose"></div>
+            <div class="form-group"><label>Description</label><textarea id="descInput" rows="3" placeholder="Detailed description"></textarea></div>
+            <div class="form-group"><label>Remarks</label><input type="text" id="remarksInput" placeholder="Additional notes"></div>
             <div class="form-group">
                 <label>Product Image</label>
                 <div class="btn-grid">
-                    <button class="btn btn-secondary" onclick="document.getElementById('cameraInput').click()">
-                        <i>📷</i> Camera
-                    </button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
-                        <i>📁</i> Gallery
-                    </button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('cameraInput').click()"><i>📷</i> Camera</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()"><i>📁</i> Gallery</button>
                 </div>
                 <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="app.handleImage(this)">
                 <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="app.handleImage(this)">
@@ -370,8 +98,8 @@
     </section>
 
     <section id="viewSection" class="section">
-        <div class="search-bar">
-            <input type="text" placeholder="Search by name or customer..." oninput="app.search(this.value)">
+        <div class="search-bar" style="margin-bottom:15px; position:relative;">
+            <input type="text" placeholder="Search..." oninput="app.search(this.value)" style="width:100%; padding:12px 15px 12px 40px; border-radius:10px; border:1.5px solid #eee;">
         </div>
         <div id="recordsContainer"></div>
     </section>
@@ -379,17 +107,10 @@
     <section id="settingsSection" class="section">
         <div class="card">
             <h2>Cloud Sync Setup</h2>
-            <div class="form-group">
-                <label>Google Apps Script URL</label>
-                <input type="text" id="gasUrl" placeholder="https://script.google.com/macros/s/.../exec">
-            </div>
-            <div class="form-group">
-                <label>Sheet Name</label>
-                <input type="text" id="sheetName" value="Product Records">
-            </div>
+            <div class="form-group"><label>Google Apps Script URL</label><input type="text" id="gasUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
+            <div class="form-group"><label>Sheet Name</label><input type="text" id="sheetName" value="Product Records"></div>
             <button class="btn btn-primary" onclick="app.saveSettings()">💾 Save & Restore</button>
         </div>
-
         <div class="card">
             <h2>Data Actions</h2>
             <div class="btn-grid">
@@ -409,13 +130,9 @@
     <div id="toast" class="toast"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
-
     <script>
         const app = {
-            state: {
-                records: [],
-                config: { url: '', sheet: 'Product Records' }
-            },
+            state: { records: [], config: { url: '', sheet: 'Product Records' } },
             currentImage: null,
 
             init() {
@@ -425,9 +142,7 @@
                 if (this.state.records.length === 0 && this.state.config.url) this.restore();
             },
 
-            setToday() {
-                document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
-            },
+            setToday() { document.getElementById('dateInput').value = new Date().toISOString().split('T')[0]; },
 
             handleImage(input) {
                 const file = input.files[0];
@@ -438,15 +153,14 @@
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        let width = img.width, height = img.height, max = 1200;
+                        let width = img.width, height = img.height, max = 1000;
                         if (width > height && width > max) { height *= max/width; width = max; }
                         else if (height > max) { width *= max/height; height = max; }
                         canvas.width = width; canvas.height = height;
                         ctx.drawImage(img, 0, 0, width, height);
-                        this.currentImage = canvas.toDataURL('image/jpeg', 0.8);
+                        this.currentImage = canvas.toDataURL('image/jpeg', 0.7);
                         const preview = document.getElementById('imagePreview');
-                        preview.src = this.currentImage;
-                        preview.style.display = 'block';
+                        preview.src = this.currentImage; preview.style.display = 'block';
                     };
                     img.src = e.target.result;
                 };
@@ -470,9 +184,7 @@
                 };
 
                 this.state.records.push(record);
-                this.save();
-                this.render();
-                this.clearForm();
+                this.save(); this.render(); this.clearForm();
                 this.notify('Saved locally!', 'success');
             },
 
@@ -482,27 +194,20 @@
                 document.getElementById('descInput').value = '';
                 document.getElementById('remarksInput').value = '';
                 document.getElementById('imagePreview').style.display = 'none';
-                this.currentImage = null;
-                this.setToday();
+                this.currentImage = null; this.setToday();
             },
 
             render(list = null) {
                 const container = document.getElementById('recordsContainer');
                 const records = list || [...this.state.records].reverse();
                 document.getElementById('recordCount').textContent = `${this.state.records.length} Records`;
-
-                if (records.length === 0) {
-                    container.innerHTML = '<div style="text-align:center; padding:50px; color:#999;">No records found.</div>';
-                    return;
-                }
-
+                if (records.length === 0) { container.innerHTML = '<div style="text-align:center; padding:50px; color:#999;">No records found.</div>'; return; }
                 container.innerHTML = records.map((r) => `
                     <div class="record-card">
-                        <img src="${r.image}" class="record-img" onclick="app.zoom('${r.image}')" onerror="this.src='https://via.placeholder.com/200?text=Cloud+Image'">
+                        <img src="${r.image}" class="record-img" onclick="app.zoom('${r.image}')" onerror="this.src='https://via.placeholder.com/200?text=Image+Not+Found'">
                         <div class="record-content">
                             <div class="record-title">${r.productName}</div>
-                            <div class="record-detail">📅 ${r.date}</div>
-                            <div class="record-detail">👤 ${r.productFor}</div>
+                            <div class="record-detail">📅 ${r.date} | 👤 ${r.productFor}</div>
                             <div class="record-detail">📝 ${r.productDescription}</div>
                             ${r.remarks ? `<div class="record-detail">💬 ${r.remarks}</div>` : ''}
                         </div>
@@ -516,26 +221,21 @@
 
             search(val) {
                 const term = val.toLowerCase();
-                const filtered = this.state.records.filter(r => 
-                    r.productName.toLowerCase().includes(term) || r.productFor.toLowerCase().includes(term)
-                );
+                const filtered = this.state.records.filter(r => r.productName.toLowerCase().includes(term) || r.productFor.toLowerCase().includes(term));
                 this.render(filtered.reverse());
             },
 
             delete(id) {
                 if (confirm('Delete locally? Sync to remove from cloud.')) {
                     this.state.records = this.state.records.filter(r => r.id !== id);
-                    this.save();
-                    this.render();
-                    this.notify('Deleted locally', 'info');
+                    this.save(); this.render(); this.notify('Deleted locally', 'info');
                 }
             },
 
             saveSettings() {
                 this.state.config.url = document.getElementById('gasUrl').value.trim();
                 this.state.config.sheet = document.getElementById('sheetName').value.trim();
-                this.save();
-                this.notify('Settings saved!', 'success');
+                this.save(); this.notify('Settings saved!', 'success');
                 if (this.state.records.length === 0) this.restore();
             },
 
@@ -544,10 +244,9 @@
                 document.getElementById('loading').style.display = 'flex';
                 
                 try {
-                    // Send all records. Script handles Drive upload for base64 images.
-                    await fetch(this.state.config.url, {
+                    // We use fetch with 'cors' and proper error checking
+                    const response = await fetch(this.state.config.url, {
                         method: 'POST',
-                        mode: 'no-cors',
                         body: JSON.stringify({
                             action: 'syncRecords',
                             sheetName: this.state.config.sheet,
@@ -555,37 +254,45 @@
                         })
                     });
                     
-                    this.notify('Sync initiated!', 'success');
-                    // Refresh from cloud to get Drive URLs
-                    setTimeout(() => this.restore(), 2000);
+                    const result = await response.json();
+                    if (result.success) {
+                        this.notify(result.message, 'success');
+                        document.getElementById('statusText').textContent = 'Cloud Synced';
+                        // Refresh to get Drive URLs
+                        this.restore();
+                    } else {
+                        alert('Sync Error: ' + result.message);
+                        this.notify('Sync failed', 'error');
+                    }
                 } catch (err) {
-                    this.notify('Sync failed', 'error');
+                    console.error(err);
+                    alert('Network/URL Error: Please ensure you deployed as "Web App" and set access to "Anyone".');
+                    this.notify('Connection failed', 'error');
                 } finally {
                     document.getElementById('loading').style.display = 'none';
                 }
             },
 
-            restore() {
+            async restore() {
                 if (!this.state.config.url) return;
-                const url = `${this.state.config.url}?action=getRecords&sheetName=${encodeURIComponent(this.state.config.sheet)}`;
-                fetch(url).then(res => res.json()).then(data => {
+                try {
+                    const url = `${this.state.config.url}?action=getRecords&sheetName=${encodeURIComponent(this.state.config.sheet)}`;
+                    const res = await fetch(url);
+                    const data = await res.json();
                     if (data.success && data.records) {
                         this.state.records = data.records;
-                        this.save();
-                        this.render();
+                        this.save(); this.render();
                         this.notify(`Restored ${data.records.length} records!`, 'success');
                     }
-                }).catch(e => console.log('Restore error', e));
+                } catch (e) { console.error('Restore failed', e); }
             },
 
             async exportExcel() {
                 if (this.state.records.length === 0) return this.notify('No data!', 'error');
                 document.getElementById('loading').style.display = 'flex';
-                
                 try {
                     const workbook = new ExcelJS.Workbook();
                     const sheet = workbook.addWorksheet('Products');
-
                     sheet.columns = [
                         { header: 'Date', key: 'date', width: 15 },
                         { header: 'Product Name', key: 'name', width: 25 },
@@ -594,33 +301,23 @@
                         { header: 'Product Image', key: 'img', width: 55 },
                         { header: 'Remarks', key: 'rem', width: 25 }
                     ];
-
                     sheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
                     sheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1A2A6C' } };
                     sheet.getRow(1).height = 30;
                     sheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
 
                     for (let i = 0; i < this.state.records.length; i++) {
-                        const r = this.state.records[i];
-                        const rowNum = i + 2;
-                        const row = sheet.addRow({
-                            date: r.date,
-                            name: r.productName,
-                            for: r.productFor,
-                            desc: r.productDescription,
-                            rem: r.remarks
-                        });
-                        row.height = 210;
-                        row.alignment = { vertical: 'middle', wrapText: true };
-
+                        const r = this.state.records[i], rowNum = i + 2;
+                        const row = sheet.addRow({ date: r.date, name: r.productName, for: r.productFor, desc: r.productDescription, rem: r.remarks });
+                        row.height = 210; row.alignment = { vertical: 'middle', wrapText: true };
                         if (r.image) {
                             try {
-                                let base64Data = r.image;
-                                // If it's a Drive URL, we need to fetch it (Note: This might fail due to CORS in browser)
-                                // For now, we assume local base64 or attempt to fetch
-                                if (r.image.startsWith('http')) {
-                                    // Drive images need direct link conversion for fetch
-                                    const directUrl = r.image.replace('file/d/', 'uc?export=view&id=').replace('/view?usp=sharing', '');
+                                let base64Data;
+                                if (r.image.startsWith('data:image')) {
+                                    base64Data = r.image;
+                                } else if (r.image.startsWith('http')) {
+                                    // Proxy through Google's uc service for Drive images
+                                    const directUrl = r.image.replace('file/d/', 'uc?export=view&id=').split('/view')[0];
                                     const response = await fetch(directUrl);
                                     const blob = await response.blob();
                                     base64Data = await new Promise(resolve => {
@@ -629,32 +326,19 @@
                                         reader.readAsDataURL(blob);
                                     });
                                 }
-
-                                const imgId = workbook.addImage({
-                                    base64: base64Data,
-                                    extension: 'jpeg'
-                                });
-                                sheet.addImage(imgId, {
-                                    tl: { col: 4, row: rowNum - 1 },
-                                    ext: { width: 400, height: 270 }
-                                });
-                            } catch (e) { console.warn('Image export skip:', e); }
+                                if (base64Data) {
+                                    const imgId = workbook.addImage({ base64: base64Data, extension: 'jpeg' });
+                                    sheet.addImage(imgId, { tl: { col: 4, row: rowNum - 1 }, ext: { width: 400, height: 270 } });
+                                }
+                            } catch (e) { console.warn('Image export error', e); }
                         }
                     }
-
                     const buffer = await workbook.xlsx.writeBuffer();
                     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                     const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `Product_Register_${new Date().getTime()}.xlsx`;
-                    a.click();
+                    const a = document.createElement('a'); a.href = url; a.download = `Products_${Date.now()}.xlsx`; a.click();
                     this.notify('Excel Ready!', 'success');
-                } catch (e) {
-                    this.notify('Export failed', 'error');
-                } finally {
-                    document.getElementById('loading').style.display = 'none';
-                }
+                } catch (e) { this.notify('Export failed', 'error'); } finally { document.getElementById('loading').style.display = 'none'; }
             },
 
             switchTab(tab, el) {
@@ -668,37 +352,21 @@
 
             notify(msg, type) {
                 const toast = document.getElementById('toast');
-                toast.textContent = msg;
-                toast.style.background = type === 'success' ? '#27ae60' : (type === 'error' ? '#e74c3c' : '#1a2a6c');
-                toast.style.display = 'block';
-                setTimeout(() => toast.style.display = 'none', 3000);
+                toast.textContent = msg; toast.style.background = type === 'success' ? '#27ae60' : (type === 'error' ? '#e74c3c' : '#1a2a6c');
+                toast.style.display = 'block'; setTimeout(() => toast.style.display = 'none', 3000);
             },
 
-            save() {
-                localStorage.setItem('prod_reg_data', JSON.stringify(this.state.records));
-                localStorage.setItem('prod_reg_config', JSON.stringify(this.state.config));
-            },
-
+            save() { localStorage.setItem('prod_reg_data', JSON.stringify(this.state.records)); localStorage.setItem('prod_reg_config', JSON.stringify(this.state.config)); },
             load() {
                 const recs = localStorage.getItem('prod_reg_data'), conf = localStorage.getItem('prod_reg_config');
                 if (recs) this.state.records = JSON.parse(recs);
-                if (conf) {
-                    this.state.config = JSON.parse(conf);
-                    document.getElementById('gasUrl').value = this.state.config.url;
-                    document.getElementById('sheetName').value = this.state.config.sheet;
-                }
+                if (conf) { this.state.config = JSON.parse(conf); document.getElementById('gasUrl').value = this.state.config.url; document.getElementById('sheetName').value = this.state.config.sheet; }
             },
 
-            clearAll() {
-                if (confirm('Delete all local records?')) {
-                    this.state.records = []; this.save(); this.render();
-                    this.notify('Local data cleared', 'info');
-                }
-            },
+            clearAll() { if (confirm('Delete all local records?')) { this.state.records = []; this.save(); this.render(); this.notify('Cleared', 'info'); } },
 
             zoom(src) {
-                const modal = document.createElement('div');
-                modal.className = 'modal active';
+                const modal = document.createElement('div'); modal.className = 'modal active';
                 modal.innerHTML = `<div class="modal-content" style="padding:0; background:none; text-align:center;">
                     <img src="${src}" style="max-width:100%; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.5);">
                     <button class="btn btn-danger" style="margin-top:15px; width:auto; display:inline-flex;" onclick="this.parentElement.parentElement.remove()">Close</button>
@@ -706,11 +374,7 @@
                 document.body.appendChild(modal);
             }
         };
-
         document.addEventListener('DOMContentLoaded', () => app.init());
-        window.addEventListener('offline', () => app.notify('You are offline', 'error'));
-        window.addEventListener('online', () => app.notify('Back online!', 'success'));
     </script>
-    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
 </body>
 </html>
