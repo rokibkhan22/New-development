@@ -44,7 +44,7 @@
         .btn-secondary { background: #eee; color: var(--text); }
         .btn:active { transform: scale(0.97); opacity: 0.9; }
         .record-card { background: white; border-radius: 15px; overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow); border: 1px solid #eee; }
-        .record-img { width: 100%; height: 200px; object-fit: cover; background: #eee; }
+        .record-img { width: 100%; height: 200px; object-fit: cover; background: #f0f0f0; }
         .record-content { padding: 15px; }
         .record-title { font-weight: 700; font-size: 16px; color: var(--primary); margin-bottom: 5px; }
         .record-detail { font-size: 13px; color: var(--text-light); margin-bottom: 3px; }
@@ -64,7 +64,7 @@
 
     <div id="loading" class="loading-overlay">
         <div style="width: 40px; height: 40px; border: 4px solid #eee; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
-        <p style="margin-top: 10px; font-weight: 600;">Processing...</p>
+        <p id="loadingText" style="margin-top: 10px; font-weight: 600;">Processing...</p>
     </div>
 
     <header>
@@ -202,9 +202,13 @@
                 const records = list || [...this.state.records].reverse();
                 document.getElementById('recordCount').textContent = `${this.state.records.length} Records`;
                 if (records.length === 0) { container.innerHTML = '<div style="text-align:center; padding:50px; color:#999;">No records found.</div>'; return; }
-                container.innerHTML = records.map((r) => `
+                
+                container.innerHTML = records.map((r) => {
+                    // Drive links need to be handled carefully in UI
+                    const displayImg = r.image;
+                    return `
                     <div class="record-card">
-                        <img src="${r.image}" class="record-img" onclick="app.zoom('${r.image}')" onerror="this.src='https://via.placeholder.com/200?text=Image+Not+Found'">
+                        <img src="${displayImg}" class="record-img" onclick="app.zoom('${displayImg}')" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Image+Loading...'">
                         <div class="record-content">
                             <div class="record-title">${r.productName}</div>
                             <div class="record-detail">📅 ${r.date} | 👤 ${r.productFor}</div>
@@ -213,10 +217,10 @@
                         </div>
                         <div class="record-actions" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 15px 15px;">
                             <button class="btn btn-secondary" onclick="app.delete('${r.id}')">🗑️ Delete</button>
-                            <button class="btn btn-primary" onclick="app.zoom('${r.image}')">👁️ View</button>
+                            <button class="btn btn-primary" onclick="app.zoom('${displayImg}')">👁️ View</button>
                         </div>
                     </div>
-                `).join('');
+                `}).join('');
             },
 
             search(val) {
@@ -242,9 +246,9 @@
             async sync() {
                 if (!this.state.config.url) return this.notify('Set GAS URL first!', 'error');
                 document.getElementById('loading').style.display = 'flex';
+                document.getElementById('loadingText').textContent = 'Syncing with Cloud...';
                 
                 try {
-                    // We use fetch with 'cors' and proper error checking
                     const response = await fetch(this.state.config.url, {
                         method: 'POST',
                         body: JSON.stringify({
@@ -258,16 +262,13 @@
                     if (result.success) {
                         this.notify(result.message, 'success');
                         document.getElementById('statusText').textContent = 'Cloud Synced';
-                        // Refresh to get Drive URLs
-                        this.restore();
+                        // Wait a bit for Drive to propagate, then restore to get URLs
+                        setTimeout(() => this.restore(), 1500);
                     } else {
                         alert('Sync Error: ' + result.message);
-                        this.notify('Sync failed', 'error');
                     }
                 } catch (err) {
-                    console.error(err);
-                    alert('Network/URL Error: Please ensure you deployed as "Web App" and set access to "Anyone".');
-                    this.notify('Connection failed', 'error');
+                    alert('Sync failed. Ensure Script is deployed as "Web App" and access is "Anyone".');
                 } finally {
                     document.getElementById('loading').style.display = 'none';
                 }
@@ -282,14 +283,33 @@
                     if (data.success && data.records) {
                         this.state.records = data.records;
                         this.save(); this.render();
-                        this.notify(`Restored ${data.records.length} records!`, 'success');
+                        this.notify(`Data restored!`, 'success');
                     }
                 } catch (e) { console.error('Restore failed', e); }
+            },
+
+            async getBase64FromUrl(url) {
+                try {
+                    // For Drive links, we can fetch directly since we use the uc?export=view link
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                } catch (e) {
+                    console.error('Base64 conversion failed', e);
+                    return null;
+                }
             },
 
             async exportExcel() {
                 if (this.state.records.length === 0) return this.notify('No data!', 'error');
                 document.getElementById('loading').style.display = 'flex';
+                document.getElementById('loadingText').textContent = 'Preparing Excel...';
+                
                 try {
                     const workbook = new ExcelJS.Workbook();
                     const sheet = workbook.addWorksheet('Products');
@@ -301,6 +321,7 @@
                         { header: 'Product Image', key: 'img', width: 55 },
                         { header: 'Remarks', key: 'rem', width: 25 }
                     ];
+                    
                     sheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
                     sheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1A2A6C' } };
                     sheet.getRow(1).height = 30;
@@ -310,35 +331,35 @@
                         const r = this.state.records[i], rowNum = i + 2;
                         const row = sheet.addRow({ date: r.date, name: r.productName, for: r.productFor, desc: r.productDescription, rem: r.remarks });
                         row.height = 210; row.alignment = { vertical: 'middle', wrapText: true };
+                        
                         if (r.image) {
-                            try {
-                                let base64Data;
-                                if (r.image.startsWith('data:image')) {
-                                    base64Data = r.image;
-                                } else if (r.image.startsWith('http')) {
-                                    // Proxy through Google's uc service for Drive images
-                                    const directUrl = r.image.replace('file/d/', 'uc?export=view&id=').split('/view')[0];
-                                    const response = await fetch(directUrl);
-                                    const blob = await response.blob();
-                                    base64Data = await new Promise(resolve => {
-                                        const reader = new FileReader();
-                                        reader.onloadend = () => resolve(reader.result);
-                                        reader.readAsDataURL(blob);
-                                    });
-                                }
-                                if (base64Data) {
+                            let base64Data = null;
+                            if (r.image.startsWith('data:image')) {
+                                base64Data = r.image;
+                            } else if (r.image.startsWith('http')) {
+                                // Fetch and convert Drive URL to base64 for Excel
+                                base64Data = await this.getBase64FromUrl(r.image);
+                            }
+                            
+                            if (base64Data) {
+                                try {
                                     const imgId = workbook.addImage({ base64: base64Data, extension: 'jpeg' });
                                     sheet.addImage(imgId, { tl: { col: 4, row: rowNum - 1 }, ext: { width: 400, height: 270 } });
-                                }
-                            } catch (e) { console.warn('Image export error', e); }
+                                } catch (e) { console.warn('Image embed failed', e); }
+                            }
                         }
                     }
+                    
                     const buffer = await workbook.xlsx.writeBuffer();
                     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url; a.download = `Products_${Date.now()}.xlsx`; a.click();
                     this.notify('Excel Ready!', 'success');
-                } catch (e) { this.notify('Export failed', 'error'); } finally { document.getElementById('loading').style.display = 'none'; }
+                } catch (e) {
+                    alert('Export Error: ' + e.message);
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                }
             },
 
             switchTab(tab, el) {
