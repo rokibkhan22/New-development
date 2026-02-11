@@ -31,10 +31,9 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            padding-bottom: 70px; /* Space for bottom nav */
+            padding-bottom: 70px;
         }
 
-        /* Header */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -56,7 +55,6 @@
             gap: 10px;
         }
 
-        /* Status Bar */
         .status-container {
             background: rgba(255,255,255,0.1);
             padding: 5px 10px;
@@ -82,7 +80,6 @@
             100% { opacity: 1; }
         }
 
-        /* Sections */
         .section {
             display: none;
             padding: 15px;
@@ -98,7 +95,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Cards */
         .card {
             background: var(--card-bg);
             border-radius: 15px;
@@ -115,7 +111,6 @@
             padding-left: 10px;
         }
 
-        /* Form Controls */
         .form-group {
             margin-bottom: 15px;
         }
@@ -143,16 +138,10 @@
             box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.1);
         }
 
-        /* Buttons Grid */
         .btn-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        /* Image Upload Area */
-        .image-upload-container {
             margin-bottom: 15px;
         }
 
@@ -166,7 +155,6 @@
             border: 2px solid #eee;
         }
 
-        /* Buttons */
         .btn {
             width: 100%;
             padding: 14px;
@@ -189,7 +177,6 @@
 
         .btn:active { transform: scale(0.97); opacity: 0.9; }
 
-        /* Record Cards */
         .record-card {
             background: white;
             border-radius: 15px;
@@ -203,6 +190,7 @@
             width: 100%;
             height: 200px;
             object-fit: cover;
+            background: #eee;
         }
 
         .record-content {
@@ -222,14 +210,6 @@
             margin-bottom: 3px;
         }
 
-        .record-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding: 10px 15px 15px;
-        }
-
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -261,7 +241,6 @@
             color: var(--primary);
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -285,7 +264,6 @@
             overflow-y: auto;
         }
 
-        /* Alert */
         .toast {
             position: fixed;
             top: 20px;
@@ -301,7 +279,6 @@
             display: none;
         }
 
-        /* Search */
         .search-bar {
             margin-bottom: 15px;
             position: relative;
@@ -323,9 +300,25 @@
             transform: translateY(-50%);
             font-size: 14px;
         }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8);
+            z-index: 4000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
+
+    <div id="loading" class="loading-overlay">
+        <div style="width: 40px; height: 40px; border: 4px solid #eee; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <p style="margin-top: 10px; font-weight: 600;">Processing...</p>
+    </div>
 
     <header>
         <h1>📦 Product Register</h1>
@@ -335,7 +328,6 @@
         </div>
     </header>
 
-    <!-- Add Section -->
     <section id="addSection" class="section active">
         <div class="card">
             <h2>Product Entry</h2>
@@ -377,17 +369,13 @@
         </div>
     </section>
 
-    <!-- View Section -->
     <section id="viewSection" class="section">
         <div class="search-bar">
             <input type="text" placeholder="Search by name or customer..." oninput="app.search(this.value)">
         </div>
-        <div id="recordsContainer">
-            <!-- Records will appear here -->
-        </div>
+        <div id="recordsContainer"></div>
     </section>
 
-    <!-- Settings Section -->
     <section id="settingsSection" class="section">
         <div class="card">
             <h2>Cloud Sync Setup</h2>
@@ -412,33 +400,21 @@
         </div>
     </section>
 
-    <!-- Navigation -->
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="app.switchTab('add', this)">
-            <i>➕</i>Add
-        </div>
-        <div class="nav-item" onclick="app.switchTab('view', this)">
-            <i>📂</i>Records
-        </div>
-        <div class="nav-item" onclick="app.switchTab('settings', this)">
-            <i>⚙️</i>Setup
-        </div>
+        <div class="nav-item active" onclick="app.switchTab('add', this)"><i>➕</i>Add</div>
+        <div class="nav-item" onclick="app.switchTab('view', this)"><i>📂</i>Records</div>
+        <div class="nav-item" onclick="app.switchTab('settings', this)"><i>⚙️</i>Setup</div>
     </nav>
 
-    <!-- Toast -->
     <div id="toast" class="toast"></div>
 
-    <!-- ExcelJS Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <script>
         const app = {
             state: {
                 records: [],
-                config: {
-                    url: '',
-                    sheet: 'Product Records'
-                }
+                config: { url: '', sheet: 'Product Records' }
             },
             currentImage: null,
 
@@ -446,10 +422,7 @@
                 this.load();
                 this.setToday();
                 this.render();
-                
-                if (this.state.records.length === 0 && this.state.config.url) {
-                    this.restore();
-                }
+                if (this.state.records.length === 0 && this.state.config.url) this.restore();
             },
 
             setToday() {
@@ -459,24 +432,17 @@
             handleImage(input) {
                 const file = input.files[0];
                 if (!file) return;
-
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const img = new Image();
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        
-                        let width = img.width;
-                        let height = img.height;
-                        const max = 1200;
+                        let width = img.width, height = img.height, max = 1200;
                         if (width > height && width > max) { height *= max/width; width = max; }
                         else if (height > max) { width *= max/height; height = max; }
-                        
-                        canvas.width = width;
-                        canvas.height = height;
+                        canvas.width = width; canvas.height = height;
                         ctx.drawImage(img, 0, 0, width, height);
-                        
                         this.currentImage = canvas.toDataURL('image/jpeg', 0.8);
                         const preview = document.getElementById('imagePreview');
                         preview.src = this.currentImage;
@@ -485,24 +451,20 @@
                     img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
-                input.value = ''; // Reset input
+                input.value = '';
             },
 
             submit() {
                 const name = document.getElementById('nameInput').value.trim();
                 const forVal = document.getElementById('forInput').value.trim();
-                const desc = document.getElementById('descInput').value.trim();
-                
-                if (!name || !forVal || !this.currentImage) {
-                    return this.notify('Please fill name, customer and image!', 'error');
-                }
+                if (!name || !forVal || !this.currentImage) return this.notify('Please fill required fields!', 'error');
 
                 const record = {
                     id: Date.now().toString(),
                     date: document.getElementById('dateInput').value,
                     productName: name,
                     productFor: forVal,
-                    productDescription: desc,
+                    productDescription: document.getElementById('descInput').value.trim(),
                     remarks: document.getElementById('remarksInput').value.trim(),
                     image: this.currentImage
                 };
@@ -511,7 +473,7 @@
                 this.save();
                 this.render();
                 this.clearForm();
-                this.notify('Record saved locally!', 'success');
+                this.notify('Saved locally!', 'success');
             },
 
             clearForm() {
@@ -536,7 +498,7 @@
 
                 container.innerHTML = records.map((r) => `
                     <div class="record-card">
-                        <img src="${r.image}" class="record-img" onclick="app.zoom('${r.image}')">
+                        <img src="${r.image}" class="record-img" onclick="app.zoom('${r.image}')" onerror="this.src='https://via.placeholder.com/200?text=Cloud+Image'">
                         <div class="record-content">
                             <div class="record-title">${r.productName}</div>
                             <div class="record-detail">📅 ${r.date}</div>
@@ -544,7 +506,7 @@
                             <div class="record-detail">📝 ${r.productDescription}</div>
                             ${r.remarks ? `<div class="record-detail">💬 ${r.remarks}</div>` : ''}
                         </div>
-                        <div class="record-actions">
+                        <div class="record-actions" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 15px 15px;">
                             <button class="btn btn-secondary" onclick="app.delete('${r.id}')">🗑️ Delete</button>
                             <button class="btn btn-primary" onclick="app.zoom('${r.image}')">👁️ View</button>
                         </div>
@@ -555,8 +517,7 @@
             search(val) {
                 const term = val.toLowerCase();
                 const filtered = this.state.records.filter(r => 
-                    r.productName.toLowerCase().includes(term) || 
-                    r.productFor.toLowerCase().includes(term)
+                    r.productName.toLowerCase().includes(term) || r.productFor.toLowerCase().includes(term)
                 );
                 this.render(filtered.reverse());
             },
@@ -578,22 +539,30 @@
                 if (this.state.records.length === 0) this.restore();
             },
 
-            sync() {
+            async sync() {
                 if (!this.state.config.url) return this.notify('Set GAS URL first!', 'error');
-                this.notify('Syncing...', 'info');
+                document.getElementById('loading').style.display = 'flex';
                 
-                fetch(this.state.config.url, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify({
-                        action: 'syncRecords',
-                        sheetName: this.state.config.sheet,
-                        records: this.state.records
-                    })
-                }).then(() => {
-                    this.notify('Sync successful!', 'success');
-                    document.getElementById('statusText').textContent = 'Cloud Synced';
-                }).catch(err => this.notify('Sync failed', 'error'));
+                try {
+                    // Send all records. Script handles Drive upload for base64 images.
+                    await fetch(this.state.config.url, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: JSON.stringify({
+                            action: 'syncRecords',
+                            sheetName: this.state.config.sheet,
+                            records: this.state.records
+                        })
+                    });
+                    
+                    this.notify('Sync initiated!', 'success');
+                    // Refresh from cloud to get Drive URLs
+                    setTimeout(() => this.restore(), 2000);
+                } catch (err) {
+                    this.notify('Sync failed', 'error');
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                }
             },
 
             restore() {
@@ -609,57 +578,71 @@
                 }).catch(e => console.log('Restore error', e));
             },
 
-            exportExcel() {
+            async exportExcel() {
                 if (this.state.records.length === 0) return this.notify('No data!', 'error');
-                this.notify('Exporting...', 'info');
+                document.getElementById('loading').style.display = 'flex';
                 
-                const workbook = new ExcelJS.Workbook();
-                const sheet = workbook.addWorksheet('Products');
+                try {
+                    const workbook = new ExcelJS.Workbook();
+                    const sheet = workbook.addWorksheet('Products');
 
-                // Column order: Image is 5th, Remarks is LAST (6th)
-                sheet.columns = [
-                    { header: 'Date', key: 'date', width: 15 },
-                    { header: 'Product Name', key: 'name', width: 25 },
-                    { header: 'Product For', key: 'for', width: 25 },
-                    { header: 'Description', key: 'desc', width: 35 },
-                    { header: 'Product Image', key: 'img', width: 55 },
-                    { header: 'Remarks', key: 'rem', width: 25 } // Remarks is LAST
-                ];
+                    sheet.columns = [
+                        { header: 'Date', key: 'date', width: 15 },
+                        { header: 'Product Name', key: 'name', width: 25 },
+                        { header: 'Product For', key: 'for', width: 25 },
+                        { header: 'Description', key: 'desc', width: 35 },
+                        { header: 'Product Image', key: 'img', width: 55 },
+                        { header: 'Remarks', key: 'rem', width: 25 }
+                    ];
 
-                sheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
-                sheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1A2A6C' } };
-                sheet.getRow(1).height = 30;
-                sheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
+                    sheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+                    sheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1A2A6C' } };
+                    sheet.getRow(1).height = 30;
+                    sheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
 
-                this.state.records.forEach((r, i) => {
-                    const rowNum = i + 2;
-                    const row = sheet.addRow({
-                        date: r.date,
-                        name: r.productName,
-                        for: r.productFor,
-                        desc: r.productDescription,
-                        rem: r.remarks
-                    });
+                    for (let i = 0; i < this.state.records.length; i++) {
+                        const r = this.state.records[i];
+                        const rowNum = i + 2;
+                        const row = sheet.addRow({
+                            date: r.date,
+                            name: r.productName,
+                            for: r.productFor,
+                            desc: r.productDescription,
+                            rem: r.remarks
+                        });
+                        row.height = 210;
+                        row.alignment = { vertical: 'middle', wrapText: true };
 
-                    row.height = 210; 
-                    row.alignment = { vertical: 'middle', wrapText: true };
+                        if (r.image) {
+                            try {
+                                let base64Data = r.image;
+                                // If it's a Drive URL, we need to fetch it (Note: This might fail due to CORS in browser)
+                                // For now, we assume local base64 or attempt to fetch
+                                if (r.image.startsWith('http')) {
+                                    // Drive images need direct link conversion for fetch
+                                    const directUrl = r.image.replace('file/d/', 'uc?export=view&id=').replace('/view?usp=sharing', '');
+                                    const response = await fetch(directUrl);
+                                    const blob = await response.blob();
+                                    base64Data = await new Promise(resolve => {
+                                        const reader = new FileReader();
+                                        reader.onloadend = () => resolve(reader.result);
+                                        reader.readAsDataURL(blob);
+                                    });
+                                }
 
-                    if (r.image) {
-                        try {
-                            const imgId = workbook.addImage({
-                                base64: r.image,
-                                extension: 'jpeg'
-                            });
-                            // Image goes into column E (index 4)
-                            sheet.addImage(imgId, {
-                                tl: { col: 4, row: rowNum - 1 },
-                                ext: { width: 400, height: 270 }
-                            });
-                        } catch (e) { console.error(e); }
+                                const imgId = workbook.addImage({
+                                    base64: base64Data,
+                                    extension: 'jpeg'
+                                });
+                                sheet.addImage(imgId, {
+                                    tl: { col: 4, row: rowNum - 1 },
+                                    ext: { width: 400, height: 270 }
+                                });
+                            } catch (e) { console.warn('Image export skip:', e); }
+                        }
                     }
-                });
 
-                workbook.xlsx.writeBuffer().then(buffer => {
+                    const buffer = await workbook.xlsx.writeBuffer();
                     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
@@ -667,7 +650,11 @@
                     a.download = `Product_Register_${new Date().getTime()}.xlsx`;
                     a.click();
                     this.notify('Excel Ready!', 'success');
-                });
+                } catch (e) {
+                    this.notify('Export failed', 'error');
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                }
             },
 
             switchTab(tab, el) {
@@ -693,8 +680,7 @@
             },
 
             load() {
-                const recs = localStorage.getItem('prod_reg_data');
-                const conf = localStorage.getItem('prod_reg_config');
+                const recs = localStorage.getItem('prod_reg_data'), conf = localStorage.getItem('prod_reg_config');
                 if (recs) this.state.records = JSON.parse(recs);
                 if (conf) {
                     this.state.config = JSON.parse(conf);
@@ -705,9 +691,7 @@
 
             clearAll() {
                 if (confirm('Delete all local records?')) {
-                    this.state.records = [];
-                    this.save();
-                    this.render();
+                    this.state.records = []; this.save(); this.render();
                     this.notify('Local data cleared', 'info');
                 }
             },
@@ -715,15 +699,18 @@
             zoom(src) {
                 const modal = document.createElement('div');
                 modal.className = 'modal active';
-                modal.innerHTML = `<div class="modal-content" style="padding:0; background:none;">
-                    <img src="${src}" style="width:100%; border-radius:10px;">
-                    <button class="btn btn-danger" style="margin-top:10px;" onclick="this.parentElement.parentElement.remove()">Close</button>
+                modal.innerHTML = `<div class="modal-content" style="padding:0; background:none; text-align:center;">
+                    <img src="${src}" style="max-width:100%; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.5);">
+                    <button class="btn btn-danger" style="margin-top:15px; width:auto; display:inline-flex;" onclick="this.parentElement.parentElement.remove()">Close</button>
                 </div>`;
                 document.body.appendChild(modal);
             }
         };
 
         document.addEventListener('DOMContentLoaded', () => app.init());
+        window.addEventListener('offline', () => app.notify('You are offline', 'error'));
+        window.addEventListener('online', () => app.notify('Back online!', 'success'));
     </script>
+    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
 </body>
 </html>
